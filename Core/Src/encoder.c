@@ -18,11 +18,11 @@ void encoder_init(encoder_t* encoder, TIM_HandleTypeDef* htim) {
 void encoder_interrupt_handler(encoder_t* encoder) {
 	encoder->value = encoder->timer_instance->CNT;
 
-	uint8_t direction = (encoder->timer_instance->CR1 >> 4) & 0x1;
+	// uint8_t direction = (encoder->timer_instance->CR1 >> 4) & 0x1;
 
 	// un-sign numbers' magic :)
 	encoder->delta_count = (int8_t)(encoder->value - encoder->last_value); // do not reduce the equation!
-	encoder->delta_count = direction == COUNT_DIR_BIT_UP ? encoder->delta_count : -encoder->delta_count;
+	// encoder->delta_count = direction == COUNT_DIR_BIT_UP ? encoder->delta_count : -encoder->delta_count;
 
 	encoder->last_value = encoder->value;
 }
