@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "encoder.h"
+#include "motor_driver.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,6 +62,8 @@ static void MX_TIM4_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 encoder_t encoder_wheel_1;
+motor_t motor_left;
+motor_t motor_right;
 /* USER CODE END 0 */
 
 /**
@@ -98,12 +101,30 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim3);
   encoder_init(&encoder_wheel_1, &htim2);
+  motor_init(&motor_right, &htim4, &TIM4->CCR1, &TIM4->CCR2, TIM_CHANNEL_1, TIM_CHANNEL_2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  motor_move_operate(&motor_right, 50);
+	  HAL_Delay(3000);
+	  motor_move_operate(&motor_right, 80);
+	  HAL_Delay(3000);
+	  motor_move_operate(&motor_right, 30);
+	  HAL_Delay(3000);
+	  motor_move_operate(&motor_right, 0);
+	  HAL_Delay(3000);
+
+	  motor_move_operate(&motor_right, -50);
+	  HAL_Delay(3000);
+	  motor_move_operate(&motor_right, -80);
+	  HAL_Delay(3000);
+	  motor_move_operate(&motor_right, -30);
+	  HAL_Delay(3000);
+	  motor_move_operate(&motor_right, -0);
+	  HAL_Delay(3000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
