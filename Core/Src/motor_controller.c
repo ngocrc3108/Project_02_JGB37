@@ -7,6 +7,8 @@
 
 #include "motor_controller.h"
 
+PIDLoop_Typedef pid_loop_right;
+
 void pid_loop_handler(PIDLoop_Typedef* loop_inst)
 {
 	loop_inst->speed = (double)loop_inst->encoder.delta_count;

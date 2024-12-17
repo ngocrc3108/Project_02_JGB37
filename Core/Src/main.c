@@ -63,7 +63,7 @@ static void MX_TIM4_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-PIDLoop_Typedef pid_loop_right;
+
 /* USER CODE END 0 */
 
 /**
