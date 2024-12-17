@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "encoder.h"
 #include "motor_driver.h"
+#include "motor_controller.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,9 +62,7 @@ static void MX_TIM4_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-encoder_t encoder_wheel_1;
-motor_t motor_left;
-motor_t motor_right;
+PIDLoop_Typedef pid_loop_right;
 /* USER CODE END 0 */
 
 /**
@@ -99,32 +98,18 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
+  motor_init(&pid_loop_right.motor, &htim4, &TIM4->CCR1, &TIM4->CCR2, TIM_CHANNEL_1, TIM_CHANNEL_2);
+  encoder_init(&pid_loop_right.encoder, &htim2);
+  pid_loop_init(&pid_loop_right);
+  pid_loop_set_speed(&pid_loop_right, 15);
+  
   HAL_TIM_Base_Start_IT(&htim3);
-  encoder_init(&encoder_wheel_1, &htim2);
-  motor_init(&motor_right, &htim4, &TIM4->CCR1, &TIM4->CCR2, TIM_CHANNEL_1, TIM_CHANNEL_2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  motor_move_operate(&motor_right, 50);
-	  HAL_Delay(3000);
-	  motor_move_operate(&motor_right, 80);
-	  HAL_Delay(3000);
-	  motor_move_operate(&motor_right, 30);
-	  HAL_Delay(3000);
-	  motor_move_operate(&motor_right, 0);
-	  HAL_Delay(3000);
-
-	  motor_move_operate(&motor_right, -50);
-	  HAL_Delay(3000);
-	  motor_move_operate(&motor_right, -80);
-	  HAL_Delay(3000);
-	  motor_move_operate(&motor_right, -30);
-	  HAL_Delay(3000);
-	  motor_move_operate(&motor_right, -0);
-	  HAL_Delay(3000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -363,7 +348,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
-	encoder_interrupt_handler(&encoder_wheel_1);
+	encoder_interrupt_handler(&pid_loop_right.encoder);
+
+	pid_loop_handler(&pid_loop_right);
 }
 /* USER CODE END 4 */
 
