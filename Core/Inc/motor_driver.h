@@ -10,6 +10,8 @@
 
 #include "stm32f1xx_hal.h"
 
+#define MOTOR_MAX_SPEED		100
+
 typedef struct {
 	int speed; // count per pid loop
 	volatile uint32_t* p_CCR_A;
