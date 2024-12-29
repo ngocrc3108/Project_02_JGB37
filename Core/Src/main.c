@@ -100,10 +100,17 @@ int main(void)
   MX_TIM4_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-  motor_init(&pid_loop_right.motor, &htim4, &TIM4->CCR1, &TIM4->CCR2, TIM_CHANNEL_1, TIM_CHANNEL_2);
+  //init left wheel
+  motor_init(&pid_loop_left.motor, &htim4, &TIM4->CCR1, &TIM4->CCR2, TIM_CHANNEL_1, TIM_CHANNEL_2);
+  encoder_init(&pid_loop_left.encoder, &htim2);
+  pid_loop_init(&pid_loop_left);
+  pid_loop_set_speed(&pid_loop_left, 0);
+
+  //init right wheel
+  motor_init(&pid_loop_right.motor, &htim4, &TIM4->CCR3, &TIM4->CCR4, TIM_CHANNEL_3, TIM_CHANNEL_4);
   encoder_init(&pid_loop_right.encoder, &htim2);
   pid_loop_init(&pid_loop_right);
-  pid_loop_set_speed(&pid_loop_right, 15);
+  pid_loop_set_speed(&pid_loop_right, 0);
   
   HAL_TIM_Base_Start_IT(&htim3);
   /* USER CODE END 2 */
@@ -357,8 +364,12 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
-	encoder_interrupt_handler(&pid_loop_right.encoder);
+	//handle interrupt for left wheel
+	encoder_interrupt_handler(&pid_loop_left.encoder);
+	pid_loop_handler(&pid_loop_left);
 
+	//handle interrupt for right wheel
+	encoder_interrupt_handler(&pid_loop_right.encoder);
 	pid_loop_handler(&pid_loop_right);
 }
 /* USER CODE END 4 */

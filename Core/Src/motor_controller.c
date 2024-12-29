@@ -7,7 +7,9 @@
 
 #include "motor_controller.h"
 
+PIDLoop_Typedef pid_loop_left;
 PIDLoop_Typedef pid_loop_right;
+
 
 void pid_loop_handler(PIDLoop_Typedef* loop_inst)
 {

@@ -41,8 +41,8 @@ ComStatus_t com_read_encoder_service()
   __disable_irq();
 
   /* Do some stuff here which can not be interrupted */
-	data[1] = pid_loop_right.encoder.delta_count;
-	data[2] = 0; // reserved for left wheel!
+	data[1] = pid_loop_left.encoder.delta_count;
+	data[2] = pid_loop_right.encoder.delta_count;
 
   /* Enable interrupts back */
   if (!prim) {
@@ -60,7 +60,8 @@ ComStatus_t com_read_encoder_service()
 
 ComStatus_t com_write_velocity_service(uint8_t* data)
 {
-	pid_loop_right.target_speed = (double)((int8_t)data[1]);
+	pid_loop_left.target_speed = (double)((int8_t)data[1]);
+	pid_loop_right.target_speed = (double)((int8_t)data[2]);
 
 	uint8_t response[1] = {COM_SERVICE_VELOCITY_WRITE};
 	uint8_t result = CDC_Transmit_FS(response, sizeof(response));

@@ -26,7 +26,9 @@ typedef struct {
 	motor_t motor;
 } PIDLoop_Typedef;
 
+extern PIDLoop_Typedef pid_loop_left;
 extern PIDLoop_Typedef pid_loop_right;
+
 
 extern void pid_loop_init(PIDLoop_Typedef* loop_inst);
 extern void pid_loop_handler(PIDLoop_Typedef* loop_inst);
